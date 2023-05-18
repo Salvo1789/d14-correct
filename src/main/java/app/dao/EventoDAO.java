@@ -1,11 +1,15 @@
 package app.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import app.entities.Concerto;
 import app.entities.Evento;
 import app.utils.JpaUtil;
 
@@ -77,5 +81,13 @@ public class EventoDAO {
 			em.close();
 		}
 
+	}
+
+	public List<Concerto> getConcertiInStreaming(boolean inStreaming) {
+		EntityManager em = JpaUtil.getEntityManagerFactory().createEntityManager();
+		TypedQuery<Concerto> getAllQuery = em.createQuery("SELECT c FROM Concerto c WHERE inStreaming = :inStreaming",
+				Concerto.class);
+		getAllQuery.setParameter("InStreaming", inStreaming);
+		return getAllQuery.getResultList();
 	}
 }
